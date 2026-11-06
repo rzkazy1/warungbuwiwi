@@ -1,10 +1,7 @@
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\controller\StokController.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\Barang.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\Database.java
-D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\IOperasiStok.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\IStokRepository.java
-D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\ReturBarang.java
-D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\StokMasuk.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\model\StokRepository.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\view\StokView.java
 D:\Kuliah\warungbuwiwi\src\main\java\com\adpl\warungbuwiwi\Warungbuwiwi.java
