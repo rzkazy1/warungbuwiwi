@@ -23,7 +23,7 @@ public class StokView extends JFrame {
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 5, 5));
         panelForm.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        panelForm.add(new JLabel("ID Barang (misal B01):"));
+        panelForm.add(new JLabel("ID Barang :"));
         panelForm.add(txtIdBarang);
         panelForm.add(new JLabel("Jenis Operasi:"));
         panelForm.add(cmbJenis);
