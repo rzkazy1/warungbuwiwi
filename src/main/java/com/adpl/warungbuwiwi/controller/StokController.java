@@ -1,10 +1,13 @@
 package com.adpl.warungbuwiwi.controller;
 
-import com.adpl.warungbuwiwi.model.*;
+import com.adpl.warungbuwiwi.model.Barang;
+import com.adpl.warungbuwiwi.model.IStokRepository;
 import com.adpl.warungbuwiwi.view.StokView;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StokController {
     private final IStokRepository repository;
@@ -15,44 +18,76 @@ public class StokController {
         this.view = view;
 
         loadTable();
-        this.view.addProsesListener(e -> prosesStok());
-    }
 
-    private void prosesStok() {
-        try {
-            String id = view.getIdBarang();
-            int jumlah = Integer.parseInt(view.getJumlah());
-
-            Barang barang = repository.getBarangById(id);
-            if (barang == null) {
-                JOptionPane.showMessageDialog(view, "ID Barang tidak ditemukan!");
-                return;
+        // Event Tombol CREATE
+        view.addTambahListener(e -> {
+            try {
+                Barang b = new Barang(
+                    view.getIdInput(),
+                    view.getNamaInput(),
+                    Integer.parseInt(view.getStokInput())
+                );
+                repository.insert(b);
+                view.clearForm();
+                loadTable();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(view, "Stok harus berupa angka!");
             }
+        });
 
-            IOperasiStok operasi;
-            if (view.getJenisOperasi().equals("Stok Masuk")) {
-                operasi = new StokMasuk();
+        // Event Tombol UPDATE
+        view.addUbahListener(e -> {
+            try {
+                Barang b = new Barang(
+                    view.getIdInput(),
+                    view.getNamaInput(),
+                    Integer.parseInt(view.getStokInput())
+                );
+                repository.update(b);
+                view.clearForm();
+                loadTable();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(view, "Stok harus berupa angka!");
+            }
+        });
+
+        // Event Tombol DELETE
+        view.addHapusListener(e -> {
+            String id = view.getIdInput();
+            if (!id.isEmpty()) {
+                repository.delete(id);
+                view.clearForm();
+                loadTable();
             } else {
-                operasi = new ReturBarang();
+                JOptionPane.showMessageDialog(view, "Pilih baris di tabel yang ingin dihapus!");
             }
+        });
 
-            int stokBaru = operasi.hitungStokBaru(barang.getStokBarang(), jumlah);
-            repository.updateStok(id, stokBaru);
+        // Event Tombol CLEAR
+        view.addClearListener(e -> view.clearForm());
 
-            view.resetForm();
-            loadTable();
-            JOptionPane.showMessageDialog(view, "Stok berhasil diperbarui!");
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(view, "Kuantitas tidak valid");
-        } catch (IllegalArgumentException ex) {
-            JOptionPane.showMessageDialog(view, ex.getMessage());
-        }
+        // Klik baris tabel otomatis mengisi form input
+        view.getTable().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = view.getTable().getSelectedRow();
+                if (row != -1) {
+                    DefaultTableModel model = view.getTableModel();
+                    view.setForm(
+                        model.getValueAt(row, 0).toString(),
+                        model.getValueAt(row, 1).toString(),
+                        model.getValueAt(row, 2).toString()
+                    );
+                }
+            }
+        });
     }
 
+    // Fungsi READ ke Tabel
     private void loadTable() {
         DefaultTableModel model = view.getTableModel();
         model.setRowCount(0);
-        for (Barang b : repository.getAllBarang()) {
+        for (Barang b : repository.getAll()) {
             model.addRow(new Object[]{b.getIdBarang(), b.getNamaBarang(), b.getStokBarang()});
         }
     }
